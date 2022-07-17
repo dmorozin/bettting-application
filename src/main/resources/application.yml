@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/betting_app
+    username: postgres
+    password: sasasa
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    changeLog: classpath:/db/changelog/db.changelog.xml
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
