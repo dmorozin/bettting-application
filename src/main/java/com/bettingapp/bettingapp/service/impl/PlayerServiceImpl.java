@@ -1,6 +1,7 @@
 package com.bettingapp.bettingapp.service.impl;
 
 import com.bettingapp.bettingapp.dto.BetInsertionDTO;
+import com.bettingapp.bettingapp.dto.PlayerBetslipsDTO;
 import com.bettingapp.bettingapp.dto.PlayerInfoDTO;
 import com.bettingapp.bettingapp.exception.ResourceNotFoundException;
 import com.bettingapp.bettingapp.model.*;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static com.bettingapp.bettingapp.utils.Constants.PLAYER_NOT_FOUND;
 
@@ -24,18 +28,18 @@ public class PlayerServiceImpl implements PlayerService {
     private final BetslipRepository betslipRepository;
     private final BetRepository betRepository;
     @PersistenceContext
-    private final EntityManager entityManager;
+    private final EntityManager em;
 
     @Autowired
     public PlayerServiceImpl(PlayerRepository playerRepository,
                              BetslipRepository betslipRepository,
                              BetRepository betRepository,
-                             EntityManager entityManager) {
+                             EntityManager em) {
 
         this.playerRepository = playerRepository;
         this.betslipRepository = betslipRepository;
         this.betRepository = betRepository;
-        this.entityManager = entityManager;
+        this.em = em;
     }
 
     @Override
@@ -51,19 +55,22 @@ public class PlayerServiceImpl implements PlayerService {
     public long addNewBetslip(long playerId, BetInsertionDTO betInsertionDTO) {
 
         Player player = getPlayer(playerId);
-        player.setWalletAmount(betInsertionDTO.getWalletAmount());
+        double updatedWalletAmount = player.getWalletAmount() - betInsertionDTO.getStake();
+        player.setWalletAmount(updatedWalletAmount);
         playerRepository.save(player);
 
         Betslip betslip = Betslip.builder()
                 .createdOn(LocalDateTime.now())
                 .player(player)
+                .stake(betInsertionDTO.getStake())
+                .gain(betInsertionDTO.getGain())
                 .build();
 
         Betslip newBetslip = betslipRepository.save(betslip);
 
         for (BetInsertionDTO.BetDTO betDTO : betInsertionDTO.getBets()) {
-            Odd odd = entityManager.getReference(Odd.class, betDTO.getOddId());
-            Offer offer = entityManager.getReference(Offer.class, betDTO.getOfferId());
+            Odd odd = em.getReference(Odd.class, betDTO.getOddId());
+            Offer offer = em.getReference(Offer.class, betDTO.getOfferId());
             Bet bet = Bet.builder()
                     .odd(odd)
                     .offer(offer)
@@ -75,7 +82,35 @@ public class PlayerServiceImpl implements PlayerService {
         return newBetslip.getId();
     }
 
+    @Override
+    public List<PlayerBetslipsDTO> getPlayerBets(long playerId) {
+
+        List<Betslip> betslips = betslipRepository.findAllByPlayer_Id(playerId);
+        List<PlayerBetslipsDTO> playerBetslipsDTOS = new ArrayList<>();
+
+        for (Betslip betslip : betslips) {
+            Set<Bet> bets = betslip.getBets();
+            List<PlayerBetslipsDTO.PlacedBetsDTO> placedBets = new ArrayList<>();
+
+            for (Bet bet : bets) {
+                placedBets.add(new PlayerBetslipsDTO.PlacedBetsDTO(bet.getOffer().getHomeTeam(),
+                        bet.getOffer().getAwayTeam(),
+                        bet.getOdd().getOutcome().getName(),
+                        bet.getOdd().getValue()));
+            }
+
+            playerBetslipsDTOS.add(new PlayerBetslipsDTO(betslip.getId(),
+                    betslip.getCreatedOn(),
+                    placedBets,
+                    betslip.getStake(),
+                    betslip.getGain()));
+        }
+
+        return playerBetslipsDTOS;
+    }
+
     private Player getPlayer(long playerId) {
-        return playerRepository.findById(playerId).orElseThrow(() -> new ResourceNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
+        return playerRepository.findById(playerId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(PLAYER_NOT_FOUND, playerId)));
     }
 }

@@ -35,8 +35,7 @@ public class OfferServiceImpl implements OfferService {
                 offer.getHomeTeam(),
                 offer.getAwayTeam(),
                 offer.getOdds().stream()
-                        .map(odd -> new OddDTO(odd.getId(), odd.getOutcome().getTitle(), odd.getValue()))
+                        .map(odd -> new OddDTO(odd.getId(), odd.getOutcome().getName(), odd.getValue()))
                         .collect(Collectors.toList()));
     }
-
 }

@@ -19,6 +19,8 @@ public class Outcome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String abbreviation;
+
+    private String name;
 }
 

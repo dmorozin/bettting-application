@@ -1,0 +1,20 @@
+<div class="played-bets-container">
+    <mat-card>
+        <mat-card-title>Played bets</mat-card-title>
+        <mat-card-content>
+            <mat-list role="list">
+                <mat-list-item role="listitem" *ngFor="let bet of placedBets">{{bet.bet}}</mat-list-item>
+            </mat-list>
+            <p>Odds: {{odds | number: '1.1-2'}}</p>
+            <p>Possible gain: {{gain | number: '1.1-2'}}</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Stake</mat-label>
+                <input type="number" matInput placeholder="" value="5" min="5" max="10000" name="stake"
+                    (ngModelChange)="onChange($event)" [(ngModel)]="stake" id="stake">
+            </mat-form-field>
+            <button mat-button (click)="submitBet()" [disabled]="placedBets.length === 0">PLACE THE BET</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

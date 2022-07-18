@@ -9,7 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BetInsertionDTO {
 
-    private double walletAmount;
+    private double stake;
+    private double gain;
     private List<BetDTO> bets;
 
     @Getter

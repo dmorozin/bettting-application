@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-    <changeSet author="unknown" id="1658085821608-1">
+    <changeSet author="unknown" id="1658145304253-1">
         <createTable tableName="offer">
             <column autoIncrement="true" name="id" type="INTEGER">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="offer_pkey"/>
@@ -15,17 +15,20 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-2">
+    <changeSet author="unknown" id="1658145304253-2">
         <createTable tableName="outcome">
             <column autoIncrement="true" name="id" type="INTEGER">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="outcome_pkey"/>
             </column>
-            <column name="title" type="VARCHAR(50)">
+            <column name="abbreviation" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-3">
+    <changeSet author="unknown" id="1658145304253-3">
         <createTable tableName="odd">
             <column autoIncrement="true" name="id" type="INTEGER">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="odd_pkey"/>
@@ -41,7 +44,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-4">
+    <changeSet author="unknown" id="1658145304253-4">
         <createTable tableName="player">
             <column autoIncrement="true" name="id" type="INTEGER">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="player_pkey"/>
@@ -54,7 +57,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-5">
+    <changeSet author="unknown" id="1658145304253-5">
         <createTable tableName="betslip">
             <column autoIncrement="true" name="id" type="INTEGER">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="betslip_pkey"/>
@@ -65,9 +68,15 @@
             <column name="created_on" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
+            <column name="stake" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gain" type="numeric">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-6">
+    <changeSet author="unknown" id="1658145304253-6">
         <createTable tableName="bet">
             <column autoIncrement="true" name="id" type="INTEGER">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="bet_pkey"/>
@@ -83,39 +92,39 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-7">
-        <addUniqueConstraint columnNames="title" constraintName="outcome_title_key" tableName="outcome"/>
+    <changeSet author="unknown" id="1658145304253-7">
+        <addUniqueConstraint columnNames="name" constraintName="outcome_name_key" tableName="outcome"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-8">
+    <changeSet author="unknown" id="1658145304253-8">
         <addUniqueConstraint columnNames="name" constraintName="player_name_key" tableName="player"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-9">
+    <changeSet author="unknown" id="1658145304253-9">
         <addForeignKeyConstraint baseColumnNames="betslip_id" baseTableName="bet" constraintName="bet_betslip_id_fkey"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="betslip" validate="true"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-10">
+    <changeSet author="unknown" id="1658145304253-10">
         <addForeignKeyConstraint baseColumnNames="odd_id" baseTableName="bet" constraintName="bet_odd_id_fkey"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="odd" validate="true"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-11">
+    <changeSet author="unknown" id="1658145304253-11">
         <addForeignKeyConstraint baseColumnNames="offer_id" baseTableName="bet" constraintName="bet_offer_id_fkey"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="offer" validate="true"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-12">
+    <changeSet author="unknown" id="1658145304253-12">
         <addForeignKeyConstraint baseColumnNames="player_id" baseTableName="betslip"
                                  constraintName="betslip_player_id_fkey" deferrable="false" initiallyDeferred="false"
                                  onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id"
                                  referencedTableName="player" validate="true"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-13">
+    <changeSet author="unknown" id="1658145304253-13">
         <addForeignKeyConstraint baseColumnNames="offer_id" baseTableName="odd" constraintName="odd_offer_id_fkey"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="offer" validate="true"/>
     </changeSet>
-    <changeSet author="unknown" id="1658085821608-14">
+    <changeSet author="unknown" id="1658145304253-14">
         <addForeignKeyConstraint baseColumnNames="outcome_id" baseTableName="odd" constraintName="odd_outcome_id_fkey"
                                  deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="outcome" validate="true"/>
@@ -138,13 +147,16 @@
 
     <changeSet author="unknown" id="insert-outcome">
         <insert tableName="outcome">
-            <column name="title" value="Home Win"/>
+            <column name="abbreviation" value="Home Win"/>
+            <column name="name" value="1"/>
         </insert>
         <insert tableName="outcome">
-            <column name="title" value="Away Win"/>
+            <column name="abbreviation" value="Away Win"/>
+            <column name="name" value="2"/>
         </insert>
         <insert tableName="outcome">
-            <column name="title" value="Draw"/>
+            <column name="abbreviation" value="Draw"/>
+            <column name="name" value="X"/>
         </insert>
     </changeSet>
 

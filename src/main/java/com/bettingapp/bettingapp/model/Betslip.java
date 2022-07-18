@@ -24,8 +24,12 @@ public class Betslip {
 
     private LocalDateTime createdOn;
 
+    private double stake;
+
+    private double gain;
+
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             mappedBy = "betslip")
     private Set<Bet> bets;
 }

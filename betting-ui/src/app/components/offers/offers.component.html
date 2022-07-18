@@ -1,0 +1,46 @@
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="homeTeam">
+            <th mat-header-cell *matHeaderCellDef> Home </th>
+            <td mat-cell *matCellDef="let element"> {{element.homeTeam}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="awayTeam">
+            <th mat-header-cell *matHeaderCellDef> Away </th>
+            <td mat-cell *matCellDef="let element"> {{element.awayTeam}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="homeWinOdd">
+            <th mat-header-cell *matHeaderCellDef> 1 </th>
+            <td mat-cell *matCellDef="let element" (click)="onBet(element, element.homeWinOdd)"
+                [ngClass]="[isOddSelected(element.homeWinOdd.oddId) ? 'selected' : '']">
+                {{element.homeWinOdd.oddValue}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="drawOdd">
+            <th mat-header-cell *matHeaderCellDef> X </th>
+            <td mat-cell *matCellDef="let element" (click)="onBet(element, element.drawOdd)"
+                [ngClass]="[isOddSelected(element.drawOdd.oddId) ? 'selected' : '']">
+                {{element.drawOdd.oddValue}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="awayWinOdd">
+            <th mat-header-cell *matHeaderCellDef> 2 </th>
+            <td mat-cell *matCellDef="let element" (click)="onBet(element, element.awayWinOdd)"
+                [ngClass]="[isOddSelected(element.awayWinOdd.oddId) ? 'selected' : '']">
+                {{element.awayWinOdd.oddValue}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+    </mat-paginator>
+</div>

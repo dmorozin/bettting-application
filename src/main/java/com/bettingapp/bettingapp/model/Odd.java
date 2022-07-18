@@ -18,7 +18,7 @@ public class Odd {
 
     private double value;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "outcome_id", nullable = false)
     private Outcome outcome;
 

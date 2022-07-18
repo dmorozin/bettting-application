@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OddDTO {
 
-    private long id;
+    private long oddId;
     private String outcome;
     private double oddValue;
 }
