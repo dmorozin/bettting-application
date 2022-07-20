@@ -11,7 +11,7 @@ import java.util.List;
 public class PlayerBetslipsDTO {
 
     private long betslipId;
-    private LocalDateTime createdOn;
+    private String createdOn;
     private List<PlacedBetsDTO> placedBets;
     private double stake;
     private double gain;

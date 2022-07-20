@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { OddModel, OfferModel, OfferService, OfferTableModel, PlacedBetModel } from 'src/app/services/offer.service';
+import { BetPlacingUiService } from 'src/app/services/bet-placing-ui.service';
+import { OddModel, OfferModel, OfferService, OfferTableModel } from 'src/app/services/offer.service';
 
 
 @Component({
@@ -19,13 +20,25 @@ export class OffersComponent implements OnInit, AfterViewInit {
     'awayWinOdd'
   ];
   dataSource: MatTableDataSource<OfferTableModel> = new MatTableDataSource<OfferTableModel>();
+  loading = true;
+
+  pageSizeOptions = [3, 5, 10];
+  length = 10;
+  pageSize = 5;
+  pageIndex = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
-  constructor(private offerService: OfferService) { }
+  constructor(private offerService: OfferService,
+    private betPlacingUiService: BetPlacingUiService) { }
 
   ngOnInit(): void {
-    this.offerService.getOffers().subscribe((res) => {
+    this.createTable(0, this.pageSize);
+  }
+
+  private createTable(page: number, size: number) {
+    this.loading = true;
+    this.offerService.getOffers(page, size).subscribe((res) => {
       const tableData: OfferTableModel[] = res['content'].map((it: OfferModel) => (
         {
           id: it.offerId,
@@ -38,6 +51,8 @@ export class OffersComponent implements OnInit, AfterViewInit {
       ));
 
       this.dataSource = new MatTableDataSource<OfferTableModel>(tableData);
+      this.length = res.totalElements;
+      this.loading = false;
     });
   }
 
@@ -47,13 +62,20 @@ export class OffersComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onPageChange(event: any) {
+    //  console.log(event);
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.createTable(event.pageIndex, this.pageSize);
+  }
+
   isOddSelected(oddId: number) {
-   return this.offerService.getPlacedBets().some(bet => bet.oddId === oddId);
+    return this.betPlacingUiService.getPlacedBets().some(bet => bet.oddId === oddId);
   }
 
   onBet(element: OfferTableModel, odd: OddModel) {
     const bet = `${element.homeTeam} - ${element.awayTeam} ${odd.outcome} - ${odd.oddValue}`;
-    this.offerService.setPlacedBet({
+    this.betPlacingUiService.setPlacedBet({
       offerId: element.id,
       oddId: odd.oddId,
       bet,

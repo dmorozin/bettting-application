@@ -1,0 +1,10 @@
+.wallet-card {
+    width: 40%;
+    margin: 30px 0;
+}
+
+.wallet-amount {
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+}

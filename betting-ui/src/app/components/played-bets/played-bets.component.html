@@ -12,9 +12,15 @@
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Stake</mat-label>
                 <input type="number" matInput placeholder="" value="5" min="5" max="10000" name="stake"
-                    (ngModelChange)="onChange($event)" [(ngModel)]="stake" id="stake">
+                    [formControl]="stakeFormControl" id="stake">
+                <mat-error *ngIf="stakeFormControl.hasError('min')">
+                    Stake cannot be less than <strong>5</strong>
+                </mat-error>
+                <mat-error *ngIf="stakeFormControl.hasError('max')">
+                    Stake cannot be higher than <strong>{{walletAmount}}</strong>
+                </mat-error>
             </mat-form-field>
-            <button mat-button (click)="submitBet()" [disabled]="placedBets.length === 0">PLACE THE BET</button>
+            <button mat-button (click)="submitBet()" [disabled]="isButtonDisabled()">PLACE THE BET</button>
         </mat-card-actions>
     </mat-card>
 </div>

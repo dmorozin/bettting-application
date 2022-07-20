@@ -4,11 +4,11 @@ import com.bettingapp.bettingapp.dto.OfferDTO;
 import com.bettingapp.bettingapp.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,8 +24,9 @@ public class OfferController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<OfferDTO>> getOffers(@PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<OfferDTO>> getOffers(@RequestParam int page,
+                                                    @RequestParam int size) {
 
-        return ResponseEntity.ok(offerService.getOffers(pageable));
+        return ResponseEntity.ok(offerService.getOffers(PageRequest.of(page, size)));
     }
 }

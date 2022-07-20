@@ -1,0 +1,9 @@
+<app-player-wallet *ngIf="!loading else spinner" [name]="playerInfo.name" [walletAmount]="playerInfo.amount">
+</app-player-wallet>
+<app-offers></app-offers>
+<app-played-bets *ngIf="!loading else spinner" [walletAmount]="playerInfo.amount" [playerId]="playerInfo.id">
+</app-played-bets>
+
+<ng-template #spinner>
+    <mat-spinner class="spinner"></mat-spinner>
+</ng-template>

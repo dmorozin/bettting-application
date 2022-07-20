@@ -15,14 +15,27 @@ import { PlayedBetsComponent } from './components/played-bets/played-bets.compon
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PlayerWalletComponent } from './components/player-wallet/player-wallet.component';
+import { HomeComponent } from './components/home/home.component';
+import { RouterModule, Routes } from '@angular/router';
+import { BetslipsComponent } from './components/betslips/betslips.component';
+
+const appRoutes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'betslips', component: BetslipsComponent },
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     OffersComponent,
-    PlayedBetsComponent
+    PlayedBetsComponent,
+    PlayerWalletComponent,
+    HomeComponent,
+    BetslipsComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +49,10 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     MatListModule,
     MatCardModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes, { enableTracing: true }),
   ],
   providers: [],
   bootstrap: [AppComponent]

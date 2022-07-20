@@ -10,6 +10,7 @@ import com.bettingapp.bettingapp.repository.BetslipRepository;
 import com.bettingapp.bettingapp.repository.PlayerRepository;
 import com.bettingapp.bettingapp.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -85,7 +86,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public List<PlayerBetslipsDTO> getPlayerBets(long playerId) {
 
-        List<Betslip> betslips = betslipRepository.findAllByPlayer_Id(playerId);
+        List<Betslip> betslips = betslipRepository.findAllByPlayer_Id(playerId, Sort.by(Sort.Direction.DESC, "createdOn"));
         List<PlayerBetslipsDTO> playerBetslipsDTOS = new ArrayList<>();
 
         for (Betslip betslip : betslips) {
@@ -100,7 +101,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             playerBetslipsDTOS.add(new PlayerBetslipsDTO(betslip.getId(),
-                    betslip.getCreatedOn(),
+                    betslip.getCreatedOn().toString(),
                     placedBets,
                     betslip.getStake(),
                     betslip.getGain()));
