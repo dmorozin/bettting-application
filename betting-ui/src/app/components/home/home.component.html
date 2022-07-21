@@ -1,4 +1,5 @@
-<app-player-wallet *ngIf="!loading else spinner" [name]="playerInfo.name" [walletAmount]="playerInfo.amount">
+<app-player-wallet *ngIf="!loading else spinner" [name]="playerInfo.name" [id]="playerInfo.id"
+    [walletAmount]="playerInfo.amount">
 </app-player-wallet>
 <app-offers></app-offers>
 <app-played-bets *ngIf="!loading else spinner" [walletAmount]="playerInfo.amount" [playerId]="playerInfo.id">

@@ -21,10 +21,12 @@ import { PlayerWalletComponent } from './components/player-wallet/player-wallet.
 import { HomeComponent } from './components/home/home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { BetslipsComponent } from './components/betslips/betslips.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { BetListComponent } from './components/bet-list/bet-list.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'betslips', component: BetslipsComponent },
+  { path: 'betslips/:id', component: BetslipsComponent },
 ];
 
 @NgModule({
@@ -35,7 +37,8 @@ const appRoutes: Routes = [
     PlayedBetsComponent,
     PlayerWalletComponent,
     HomeComponent,
-    BetslipsComponent
+    BetslipsComponent,
+    BetListComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ const appRoutes: Routes = [
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    MatExpansionModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
   ],
   providers: [],

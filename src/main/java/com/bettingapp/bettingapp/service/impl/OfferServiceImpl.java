@@ -1,6 +1,5 @@
 package com.bettingapp.bettingapp.service.impl;
 
-import com.bettingapp.bettingapp.dto.OddDTO;
 import com.bettingapp.bettingapp.dto.OfferDTO;
 import com.bettingapp.bettingapp.model.Offer;
 import com.bettingapp.bettingapp.repository.OfferRepository;
@@ -35,7 +34,7 @@ public class OfferServiceImpl implements OfferService {
                 offer.getHomeTeam(),
                 offer.getAwayTeam(),
                 offer.getOdds().stream()
-                        .map(odd -> new OddDTO(odd.getId(), odd.getOutcome().getName(), odd.getValue()))
+                        .map(odd -> new OfferDTO.OddDTO(odd.getId(), odd.getOutcome().getName(), odd.getValue()))
                         .collect(Collectors.toList()));
     }
 }

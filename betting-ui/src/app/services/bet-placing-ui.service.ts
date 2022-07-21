@@ -10,7 +10,11 @@ export class BetPlacingUiService {
 
   constructor() { }
 
-  public setPlacedBet(placedBet: PlacedBetModel) {
+  clearBets() {
+    this.placedBetSubject.next([]);
+  }
+
+  setPlacedBet(placedBet: PlacedBetModel) {
     const placedBets = this.placedBetSubject.getValue();
 
     const foundBet = placedBets.find(bet => bet.offerId === placedBet.offerId);
@@ -32,7 +36,7 @@ export class BetPlacingUiService {
     this.placedBetSubject.next(placedBets);
   }
 
-  public getPlacedBets() {
+  getPlacedBets() {
     return this.placedBetSubject.getValue();
   }
 

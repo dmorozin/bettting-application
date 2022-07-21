@@ -21,7 +21,7 @@ public class Offer {
     private String awayTeam;
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "offer")
     private Set<Odd> odds;
 

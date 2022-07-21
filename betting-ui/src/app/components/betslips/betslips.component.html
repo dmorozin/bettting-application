@@ -1,1 +1,32 @@
-<p>betslips works!</p>
+<div *ngIf="!loading else spinner">
+    <div  *ngIf="betslips.length > 0 else emptyData">
+        <mat-accordion multi>
+            <mat-expansion-panel (opened)="onExpand(betslip.betslipId)" *ngFor="let betslip of betslips">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        #{{betslip.betslipId}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <div>
+                            <p> {{convertDateStringToLocaleString(betslip.createdOn)}}</p>
+                            <p>Stake: {{betslip.stake}} kn</p>
+                            <p>Gain: {{betslip.gain}} kn</p>
+                        </div>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngIf="bets[betslip.betslipId] != null else spinner">
+                    <app-bet-list [bets]="getBets(betslip.betslipId)"></app-bet-list>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
+
+<ng-template #spinner>
+    <mat-spinner class="spinner"></mat-spinner>
+</ng-template>
+
+
+<ng-template #emptyData>
+   <p>No betslips</p>
+</ng-template>

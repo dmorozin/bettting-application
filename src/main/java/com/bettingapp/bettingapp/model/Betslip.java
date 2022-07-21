@@ -29,7 +29,7 @@ public class Betslip {
     private double gain;
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "betslip")
     private Set<Bet> bets;
 }

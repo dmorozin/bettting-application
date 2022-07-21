@@ -14,7 +14,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundHandling(ResourceNotFoundException exception, WebRequest request) {
 
-        ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(),
+        ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now().toString(),
                 exception.getMessage(),
                 request.getDescription(false));
 

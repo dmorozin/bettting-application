@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class OddDTO {
+public class BetslipBetDTO {
 
-    private long oddId;
+    private String homeTeam;
+    private String awayTeam;
     private String outcome;
     private double oddValue;
 }

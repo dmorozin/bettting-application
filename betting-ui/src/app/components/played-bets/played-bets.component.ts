@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BetPlacingUiService, PlacedBetModel } from 'src/app/services/bet-placing-ui.service';
 import { NewBetslipModel, PlayerService } from 'src/app/services/player.service';
@@ -16,12 +17,14 @@ export class PlayedBetsComponent implements OnInit, OnDestroy {
   odds: number = 0;
   gain: number = 0;
   stakeFormControl = new FormControl(5, [Validators.required, Validators.min(5), Validators.max(10000)]);
+  savingLoader = false;
 
   private placedBetsListener: Subscription | null = null;
   private stakeValueChangeListener: Subscription | null = null;
 
   constructor(private betPlacingUiService: BetPlacingUiService,
-    private playerService: PlayerService) { }
+    private playerService: PlayerService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.stakeFormControl.addValidators(Validators.max(this.walletAmount));
@@ -47,14 +50,23 @@ export class PlayedBetsComponent implements OnInit, OnDestroy {
         gain: this.gain,
         bets
       }
-      this.playerService.addNewBetslip(this.playerId, newBetslip).subscribe(res => {
-        console.log(res);
+      this.savingLoader = true;
+      this.playerService.addNewBetslip(this.playerId, newBetslip).subscribe({
+        next: () => {
+          this.router.navigate(['/betslips', this.playerId]);
+          this.savingLoader = false;
+        },
+        error: (err) => console.log(err)
       });
     }
   }
 
   isButtonDisabled() {
     return this.placedBets.length === 0 || this.stakeFormControl.errors != null;
+  }
+
+  getBets() {
+    return this.placedBets.map(placedBet => placedBet.bet);
   }
 
   private initializePlacedBetsListener() {
@@ -70,7 +82,6 @@ export class PlayedBetsComponent implements OnInit, OnDestroy {
   private initializeStakeValueChange() {
     this.stakeValueChangeListener = this.stakeFormControl.valueChanges.subscribe(value => {
       if (value != null) {
-        console.log(this.stakeFormControl.errors);
         this.gain = value * this.odds;
       }
     });

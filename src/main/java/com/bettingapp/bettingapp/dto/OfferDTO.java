@@ -13,4 +13,13 @@ public class OfferDTO {
     private String homeTeam;
     private String awayTeam;
     private List<OddDTO> odds;
+
+    @Getter
+    @AllArgsConstructor
+    public static class OddDTO {
+
+        private long oddId;
+        private String outcome;
+        private double oddValue;
+    }
 }

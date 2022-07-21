@@ -2,8 +2,10 @@
     <mat-card-header>
         <mat-card-title>{{name}}</mat-card-title>
     </mat-card-header>
+    <mat-icon>receipt</mat-icon>
+    <a [routerLink]="['/betslips', id]" class="align-icon">My Betslips</a>
     <mat-card-content>
         <mat-icon>account_balance_wallet</mat-icon>
-        <span class="wallet-amount">{{walletAmount}} KN</span>
+        <span class="align-icon">{{walletAmount}} KN</span>
     </mat-card-content>
 </mat-card>

@@ -52,7 +52,7 @@
             <column name="name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValueNumeric="100" name="wallet_amount" type="numeric">
+            <column defaultValueNumeric="10000" name="wallet_amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
         </createTable>

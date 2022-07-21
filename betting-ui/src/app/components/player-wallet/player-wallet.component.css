@@ -3,8 +3,12 @@
     margin: 30px 0;
 }
 
-.wallet-amount {
+.align-icon {
     position: absolute;
     margin-top: 5px;
     margin-left: 5px;
 }
+
+a, a:hover {
+    color: black;
+  }

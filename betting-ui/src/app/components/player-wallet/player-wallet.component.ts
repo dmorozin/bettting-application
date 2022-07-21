@@ -9,6 +9,7 @@ export class PlayerWalletComponent {
 
   @Input() name = '';
   @Input() walletAmount = 0;
+  @Input() id = 0;
 
   constructor() {
   }

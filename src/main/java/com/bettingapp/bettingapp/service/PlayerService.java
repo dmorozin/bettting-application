@@ -1,6 +1,7 @@
 package com.bettingapp.bettingapp.service;
 
 import com.bettingapp.bettingapp.dto.BetInsertionDTO;
+import com.bettingapp.bettingapp.dto.BetslipBetDTO;
 import com.bettingapp.bettingapp.dto.PlayerBetslipsDTO;
 import com.bettingapp.bettingapp.dto.PlayerInfoDTO;
 
@@ -13,4 +14,6 @@ public interface PlayerService {
     long addNewBetslip(long playerId, BetInsertionDTO betInsertionDTO);
 
     List<PlayerBetslipsDTO> getPlayerBets(long playerId);
+
+    List<BetslipBetDTO> getBetlipBets(long betslipId);
 }

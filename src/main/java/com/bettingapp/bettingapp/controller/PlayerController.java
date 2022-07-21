@@ -1,6 +1,7 @@
 package com.bettingapp.bettingapp.controller;
 
 import com.bettingapp.bettingapp.dto.BetInsertionDTO;
+import com.bettingapp.bettingapp.dto.BetslipBetDTO;
 import com.bettingapp.bettingapp.dto.PlayerBetslipsDTO;
 import com.bettingapp.bettingapp.dto.PlayerInfoDTO;
 import com.bettingapp.bettingapp.service.PlayerService;
@@ -22,23 +23,28 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PlayerInfoDTO> getPlayerInfo(@PathVariable long id) {
+    @GetMapping("/{playerId}")
+    public ResponseEntity<PlayerInfoDTO> getPlayerInfo(@PathVariable long playerId) {
 
-        return ResponseEntity.ok(playerService.getPlayerInfo(id));
+        return ResponseEntity.ok(playerService.getPlayerInfo(playerId));
     }
 
-    @GetMapping("/{id}/betslip")
-    public ResponseEntity<List<PlayerBetslipsDTO>> getPlayerBets(@PathVariable long id) {
+    @GetMapping("/{playerId}/betslip")
+    public ResponseEntity<List<PlayerBetslipsDTO>> getPlayerBets(@PathVariable long playerId) {
 
-        return ResponseEntity.ok(playerService.getPlayerBets(id));
+        return ResponseEntity.ok(playerService.getPlayerBets(playerId));
     }
 
+    @GetMapping("/betslip/{betslipId}")
+    public ResponseEntity<List<BetslipBetDTO>> getBetslipBets(@PathVariable long betslipId) {
 
-    @PostMapping("/{id}/betslip")
-    public ResponseEntity<Long> addNewBetslip(@PathVariable long id,
+        return ResponseEntity.ok(playerService.getBetlipBets(betslipId));
+    }
+
+    @PostMapping("/{playerId}/betslip")
+    public ResponseEntity<Long> addNewBetslip(@PathVariable long playerId,
                                               @RequestBody BetInsertionDTO betInsertionDTO) {
 
-        return ResponseEntity.ok(playerService.addNewBetslip(id, betInsertionDTO));
+        return ResponseEntity.ok(playerService.addNewBetslip(playerId, betInsertionDTO));
     }
 }

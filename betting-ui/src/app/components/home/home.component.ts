@@ -16,9 +16,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.playerSerice.getPlayerInfo(this.dummyPlayerId).subscribe((res: PlayerInfoModel) => {
-      this.playerInfo = res;
-      this.loading = false;
+    this.playerSerice.getPlayerInfo(this.dummyPlayerId).subscribe({
+      next: (res: PlayerInfoModel) => {
+        this.playerInfo = res;
+        this.loading = false;
+      },
+      error: err => console.log(err)
     });
   }
 

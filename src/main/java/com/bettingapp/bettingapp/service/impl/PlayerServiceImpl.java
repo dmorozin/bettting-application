@@ -1,6 +1,7 @@
 package com.bettingapp.bettingapp.service.impl;
 
 import com.bettingapp.bettingapp.dto.BetInsertionDTO;
+import com.bettingapp.bettingapp.dto.BetslipBetDTO;
 import com.bettingapp.bettingapp.dto.PlayerBetslipsDTO;
 import com.bettingapp.bettingapp.dto.PlayerInfoDTO;
 import com.bettingapp.bettingapp.exception.ResourceNotFoundException;
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
+import static com.bettingapp.bettingapp.utils.Constants.BETSLIP_NOT_FOUND;
 import static com.bettingapp.bettingapp.utils.Constants.PLAYER_NOT_FOUND;
 
 @Service
@@ -66,7 +67,6 @@ public class PlayerServiceImpl implements PlayerService {
                 .stake(betInsertionDTO.getStake())
                 .gain(betInsertionDTO.getGain())
                 .build();
-
         Betslip newBetslip = betslipRepository.save(betslip);
 
         for (BetInsertionDTO.BetDTO betDTO : betInsertionDTO.getBets()) {
@@ -85,29 +85,35 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<PlayerBetslipsDTO> getPlayerBets(long playerId) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdOn");
+        return betslipRepository.findAllByPlayer_Id(playerId, sort)
+                .stream()
+                .map(betslip -> new PlayerBetslipsDTO(betslip.getId(),
+                        betslip.getCreatedOn().toString(),
+                        betslip.getStake(),
+                        betslip.getGain()))
+                .collect(Collectors.toList());
+    }
 
-        List<Betslip> betslips = betslipRepository.findAllByPlayer_Id(playerId, Sort.by(Sort.Direction.DESC, "createdOn"));
-        List<PlayerBetslipsDTO> playerBetslipsDTOS = new ArrayList<>();
+    @Override
+    public List<BetslipBetDTO> getBetlipBets(long betslipId) {
 
-        for (Betslip betslip : betslips) {
-            Set<Bet> bets = betslip.getBets();
-            List<PlayerBetslipsDTO.PlacedBetsDTO> placedBets = new ArrayList<>();
+        return betslipRepository.findById(betslipId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(BETSLIP_NOT_FOUND, betslipId)))
+                .getBets()
+                .stream()
+                .map(this::toBetSlipBetDTO)
+                .collect(Collectors.toList());
+    }
 
-            for (Bet bet : bets) {
-                placedBets.add(new PlayerBetslipsDTO.PlacedBetsDTO(bet.getOffer().getHomeTeam(),
-                        bet.getOffer().getAwayTeam(),
-                        bet.getOdd().getOutcome().getName(),
-                        bet.getOdd().getValue()));
-            }
+    private BetslipBetDTO toBetSlipBetDTO(Bet bet) {
+        Offer offer = bet.getOffer();
+        Odd odd = bet.getOdd();
 
-            playerBetslipsDTOS.add(new PlayerBetslipsDTO(betslip.getId(),
-                    betslip.getCreatedOn().toString(),
-                    placedBets,
-                    betslip.getStake(),
-                    betslip.getGain()));
-        }
-
-        return playerBetslipsDTOS;
+        return new BetslipBetDTO(offer.getHomeTeam(),
+                offer.getAwayTeam(),
+                odd.getOutcome().getName(),
+                odd.getValue());
     }
 
     private Player getPlayer(long playerId) {

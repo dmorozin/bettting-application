@@ -1,0 +1,7 @@
+.mat-expansion-panel-header {
+    height: 120px;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    height: 150px;
+}

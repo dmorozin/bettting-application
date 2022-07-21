@@ -24,8 +24,12 @@ export class PlayerService {
     return this.http.post<number>(`${this.apiUrl}/${playerId}/betslip`, newBetslip, httpOptions);
   }
 
-  getPlayerBets(playerId: number): Observable<PlayerInfoModel> {
+  getPlayerBetslips(playerId: number): Observable<PlayerBetslipsModel[]> {
     return this.http.get<any>(`${this.apiUrl}/${playerId}/betslip`);
+  }
+
+  getBetslipBets(betslipId: number): Observable<PlacedBetsDTO[]> {
+    return this.http.get<any>(`${this.apiUrl}/betslip/${betslipId}`);
   }
 }
 
@@ -51,12 +55,11 @@ export interface PlayerBetslipsModel {
   createdOn: string;
   stake: number;
   gain: number;
-  placedBets: PlacedBetsDTO[];
 }
 
 export interface PlacedBetsDTO {
   homeTeam: string;
   awayTeam: string;
   outcome: string;
-  odd: number;
+  oddValue: number;
 }

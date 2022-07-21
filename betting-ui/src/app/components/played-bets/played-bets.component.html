@@ -1,10 +1,8 @@
-<div class="played-bets-container">
+<div class="played-bets-container" *ngIf="!savingLoader else spinner">
     <mat-card>
         <mat-card-title>Played bets</mat-card-title>
         <mat-card-content>
-            <mat-list role="list">
-                <mat-list-item role="listitem" *ngFor="let bet of placedBets">{{bet.bet}}</mat-list-item>
-            </mat-list>
+            <app-bet-list [bets]="getBets()"></app-bet-list>
             <p>Odds: {{odds | number: '1.1-2'}}</p>
             <p>Possible gain: {{gain | number: '1.1-2'}}</p>
         </mat-card-content>
@@ -24,3 +22,7 @@
         </mat-card-actions>
     </mat-card>
 </div>
+
+<ng-template #spinner>
+    <mat-spinner class="spinner"></mat-spinner>
+</ng-template>
