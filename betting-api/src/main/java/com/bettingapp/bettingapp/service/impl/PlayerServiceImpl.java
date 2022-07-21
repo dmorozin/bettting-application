@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ import static com.bettingapp.bettingapp.utils.Constants.BETSLIP_NOT_FOUND;
 import static com.bettingapp.bettingapp.utils.Constants.PLAYER_NOT_FOUND;
 
 @Service
+@Transactional
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
